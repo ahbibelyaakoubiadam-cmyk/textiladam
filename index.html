@@ -273,7 +273,7 @@
                             </div>
                         </div>
                         <button onclick="addToCart('Jaqueta Gore-Tex', 189)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
-                            Añadir a la cistella
+                            Comprar ahora
                         </button>
                     </div>
                 </div>
@@ -302,7 +302,7 @@
                             </div>
                         </div>
                         <button onclick="addToCart('Pantalons Tècnics', 129)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
-                            Añadir a la cistella
+                            Comprar ahora
                         </button>
                     </div>
                 </div>
@@ -331,7 +331,7 @@
                             </div>
                         </div>
                         <button onclick="addToCart('Botas de Montaña', 249)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
-                            Añadir a la cistella
+                            Comprar ahora
                         </button>
                     </div>
                 </div>
@@ -360,7 +360,7 @@
                             </div>
                         </div>
                         <button onclick="addToCart('Zapatillas Técnicas', 99)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
-                            Añadir a la cistella
+                            Comprar ahora
                         </button>
                     </div>
                 </div>
@@ -389,7 +389,7 @@
                             </div>
                         </div>
                         <button onclick="addToCart('Camiseta Térmica', 49)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
-                            Añadir a la cistella
+                            Comprar ahora
                         </button>
                     </div>
                 </div>
@@ -418,7 +418,7 @@
                             </div>
                         </div>
                         <button onclick="addToCart('Calcetines Merino', 29)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
-                            Añadir a la cistella
+                            Comprar ahora
                         </button>
                     </div>
                 </div>
@@ -447,7 +447,7 @@
                             </div>
                         </div>
                         <button onclick="addToCart('Mochila Técnica', 189)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
-                            Añadir a la cistella
+                            Comprar ahora
                         </button>
                     </div>
                 </div>
@@ -476,7 +476,7 @@
                             </div>
                         </div>
                         <button onclick="addToCart('Guantes Técnicos', 39)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
-                            Añadir a la cistella
+                            Comprar ahora
                         </button>
                     </div>
                 </div>
@@ -505,7 +505,7 @@
                             </div>
                         </div>
                         <button onclick="addToCart('Gorro Ajustable', 34)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
-                            Añadir a la cistella
+                            Comprar ahora
                         </button>
                     </div>
                 </div>
@@ -534,7 +534,7 @@
                             </div>
                         </div>
                         <button onclick="addToCart('Chaqueta de Lluvia', 159)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
-                            Añadir a la cistella
+                            Comprar ahora
                         </button>
                     </div>
                 </div>
@@ -563,7 +563,7 @@
                             </div>
                         </div>
                         <button onclick="addToCart('Leggins Técnicos', 79)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
-                            Añadir a la cistella
+                            Comprar ahora
                         </button>
                     </div>
                 </div>
@@ -592,7 +592,7 @@
                             </div>
                         </div>
                         <button onclick="addToCart('Aislante de Camping', 45)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
-                            Añadir a la cistella
+                            Comprar ahora
                         </button>
                     </div>
                 </div>
@@ -601,7 +601,7 @@
     </section>
 
     <!-- CHECKOUT / PAGO -->
-    <section class="py-20 bg-white">
+    <section id="checkout" class="py-20 bg-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-12 text-center">Processo de Pago</h2>
 
@@ -885,7 +885,8 @@
         function addToCart(product, price) {
             cart.push({ product, price });
             updateCartDisplay();
-            alert(`✅ ${product} añadido a la cistella!`);
+            document.getElementById('checkout').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            alert(`✅ ${product} añadido a la cistella! Ahora puedes completar el pago.`);
         }
 
         function updateCartDisplay() {

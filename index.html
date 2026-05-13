@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tèxtils Montblanc - El futur de la muntanya és digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.6) 100%),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><linearGradient id="g1" x1="0" y1="0" x2="1200" y2="600"><stop offset="0%25" style="stop-color:%23334155;stop-opacity:0.3"/><stop offset="100%25" style="stop-color:%231e293b;stop-opacity:0.5"/></linearGradient></defs><path d="M0,200 Q100,100 200,150 T400,100 T600,180 T800,120 T1000,200 T1200,150 L1200,0 L0,0 Z" fill="%23334155" opacity="0.4"/><path d="M0,350 Q150,300 300,320 T600,280 T900,350 T1200,320 L1200,600 L0,600 Z" fill="%231e293b" opacity="0.3"/></svg>');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease-out;
+            text-align: center;
+            z-index: 10;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse-ring {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+
+        .animate-pulse-ring {
+            animation: pulse-ring 2s ease-in-out infinite;
+        }
+
+        .product-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(30, 144, 255, 0.2);
+        }
+
+        .badge-glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(30, 144, 255, 0.8);
+            }
+        }
+
+        .btn-load {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-load::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-load:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .sticky-header {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 250px;
+            margin-bottom: 2rem;
+        }
+
+        .float-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #1f2937 0%, #1e90ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #1e90ff;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    <!-- HEADER STICKY -->
+    <header class="sticky top-0 z-50 sticky-header transition-all duration-300">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 bg-gradient-to-br from-slate-800 to-blue-600 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-lg">TM</span>
+                </div>
+                <span class="text-xl font-bold text-slate-800 hidden sm:inline">Tèxtils Montblanc</span>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menuBtn" class="md:hidden text-slate-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+
+            <!-- Desktop Menu -->
+            <div id="navMenu" class="hidden md:flex space-x-8">
+                <a href="#inicio" class="text-slate-700 hover:text-blue-600 font-medium transition">Inicio</a>
+                <a href="#tienda" class="text-slate-700 hover:text-blue-600 font-medium transition">Tienda</a>
+                <a href="#factory" class="text-slate-700 hover:text-blue-600 font-medium transition">Fábrica 4.0</a>
+                <a href="#contacto" class="text-slate-700 hover:text-blue-600 font-medium transition">Contacto</a>
+            </div>
+
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobileMenu" class="hidden md:hidden absolute top-16 left-0 right-0 bg-white border-b border-slate-200 py-4 px-4 space-y-2">
+                <a href="#inicio" class="block text-slate-700 hover:text-blue-600 font-medium py-2">Inicio</a>
+                <a href="#tienda" class="block text-slate-700 hover:text-blue-600 font-medium py-2">Tienda</a>
+                <a href="#factory" class="block text-slate-700 hover:text-blue-600 font-medium py-2">Fábrica 4.0</a>
+                <a href="#contacto" class="block text-slate-700 hover:text-blue-600 font-medium py-2">Contacto</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="inicio" class="hero-bg relative">
+        <div class="hero-content px-4">
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 gradient-text">
+                El futur de la muntanya
+                <span class="text-blue-500">és digital</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-200 mb-10 max-w-3xl mx-auto">
+                Roba tècnica per a aventurers del segle XXI. Durabilitat, innovació i sostenibilitat.
+            </p>
+            <button onclick="document.getElementById('tienda').scrollIntoView()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg transition transform hover:scale-105 btn-load">
+                Ver Catálogo
+            </button>
+        </div>
+
+        <!-- Animated Background Elements -->
+        <div class="absolute top-10 left-10 w-40 h-40 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse-ring"></div>
+        <div class="absolute bottom-10 right-10 w-40 h-40 bg-slate-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse-ring"></div>
+    </section>
+
+    <!-- TIENDA (E-Commerce) -->
+    <section id="tienda" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">Catálogo de Productos</h2>
+                <p class="text-xl text-slate-600">Selecciona tus prendas técnicas favoritas</p>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Producto 1 -->
+                <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg">
+                    <div class="h-64 bg-gradient-to-br from-blue-400 to-slate-600 flex items-center justify-center">
+                        <svg class="w-32 h-32 text-white opacity-70" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l-5.5 9h-6.5l8.5 7.5-3.5 5.5 7.5-5.5 7.5 5.5-3.5-5.5 8.5-7.5h-6.5z"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-slate-800">Jaqueta Gore-Tex</h3>
+                            <span class="badge-glow bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                                Stock
+                            </span>
+                        </div>
+                        <p class="text-slate-600 mb-4">Impermeable y transpirable. Perfecta para cualquier condición climática.</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-3xl font-bold text-blue-600">€189</span>
+                            <div class="flex space-x-1">
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-slate-300">★</span>
+                            </div>
+                        </div>
+                        <button onclick="addToCart('Jaqueta Gore-Tex', 189)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
+                            Añadir a la cistella
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Producto 2 -->
+                <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg">
+                    <div class="h-64 bg-gradient-to-br from-slate-400 to-blue-600 flex items-center justify-center">
+                        <svg class="w-32 h-32 text-white opacity-70" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 5.5C9 7.985 11.015 10 13.5 10S18 7.985 18 5.5 15.985 1 13.5 1 9 3.015 9 5.5zm0 13c0 2.485 2.015 4.5 4.5 4.5s4.5-2.015 4.5-4.5-2.015-4.5-4.5-4.5-4.5 2.015-4.5 4.5zM0 5.5C0 7.985 2.015 10 4.5 10S9 7.985 9 5.5 6.985 1 4.5 1 0 3.015 0 5.5z"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-slate-800">Pantalons Tècnics</h3>
+                            <span class="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                                Limited
+                            </span>
+                        </div>
+                        <p class="text-slate-600 mb-4">Material 4-way stretch. Comodidad y flexibilidad máximas.</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-3xl font-bold text-blue-600">€129</span>
+                            <div class="flex space-x-1">
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                            </div>
+                        </div>
+                        <button onclick="addToCart('Pantalons Tècnics', 129)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
+                            Añadir a la cistella
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Producto 3 -->
+                <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg">
+                    <div class="h-64 bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center">
+                        <svg class="w-32 h-32 text-white opacity-70" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23 4.6c0-.3-.3-.6-.6-.6h-1.8c-.3 0-.6.3-.6.6v2.3h-2.3V4.6c0-.3-.3-.6-.6-.6h-1.8c-.3 0-.6.3-.6.6v2.3H12V4.6c0-.3-.3-.6-.6-.6h-1.8c-.3 0-.6.3-.6.6v2.3H1c-.6 0-1 .4-1 1v15.4c0 .6.4 1 1 1h22c.6 0 1-.4 1-1V6.9c0-.6-.4-1-1-1z"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-slate-800">Botas de Montaña</h3>
+                            <span class="badge-glow bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                                Stock
+                            </span>
+                        </div>
+                        <p class="text-slate-600 mb-4">Agarre excepcional. Soporte de tobillo reforzado.</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-3xl font-bold text-blue-600">€249</span>
+                            <div class="flex space-x-1">
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-slate-300">★</span>
+                            </div>
+                        </div>
+                        <button onclick="addToCart('Botas de Montaña', 249)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
+                            Añadir a la cistella
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHECKOUT / PAGO -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-12 text-center">Processo de Pago</h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Shopping Cart Summary -->
+                <div class="lg:col-span-1 bg-slate-50 rounded-xl p-6 h-fit sticky top-24">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6">Resumen de Compra</h3>
+                    <div id="cartSummary" class="space-y-4 mb-6">
+                        <div class="flex justify-between items-center py-2 border-b border-slate-200">
+                            <span class="text-slate-600">Carrito vacío</span>
+                        </div>
+                    </div>
+                    <div class="border-t-2 border-slate-200 pt-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-slate-700">Subtotal:</span>
+                            <span id="subtotal" class="text-slate-800 font-bold">€0</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-slate-700">Envío:</span>
+                            <span id="shipping" class="text-slate-800 font-bold">€9,99</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xl font-bold text-blue-600 bg-blue-50 p-4 rounded-lg">
+                            <span>TOTAL:</span>
+                            <span id="total">€9,99</span>
+                        </div>
+                    </div>
+                    <button onclick="clearCart()" class="w-full mt-6 bg-slate-300 hover:bg-slate-400 text-slate-800 font-bold py-2 rounded-lg transition">
+                        Vaciar carrito
+                    </button>
+                </div>
+
+                <!-- Payment Form -->
+                <div class="lg:col-span-2">
+                    <div class="bg-slate-50 rounded-xl p-8 space-y-6">
+                        <!-- Payment Method Selection -->
+                        <div>
+                            <h4 class="text-xl font-bold text-slate-800 mb-4">Método de Pago</h4>
+                            <div class="space-y-3">
+                                <label class="flex items-center p-4 border-2 border-blue-600 rounded-lg cursor-pointer bg-white">
+                                    <input type="radio" name="paymentMethod" value="card" checked class="w-4 h-4 text-blue-600">
+                                    <span class="ml-3 text-slate-800 font-medium">💳 Tarjeta de Crédito</span>
+                                </label>
+                                <label class="flex items-center p-4 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-blue-600 transition">
+                                    <input type="radio" name="paymentMethod" value="bizum" class="w-4 h-4 text-blue-600">
+                                    <span class="ml-3 text-slate-800 font-medium">📱 Bizum</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Card Payment Form -->
+                        <div id="cardPayment" class="space-y-4">
+                            <div>
+                                <label class="block text-slate-700 font-bold mb-2">Nombre Completo</label>
+                                <input type="text" placeholder="Joan Garcia" class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-600 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-slate-700 font-bold mb-2">Número de Tarjeta</label>
+                                <input type="text" placeholder="4532 1234 5678 9010" class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-600 focus:outline-none font-mono">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-slate-700 font-bold mb-2">Vencimiento</label>
+                                    <input type="text" placeholder="MM/YY" class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-600 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-slate-700 font-bold mb-2">CVV</label>
+                                    <input type="text" placeholder="123" class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-600 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bizum Payment Form -->
+                        <div id="bizumPayment" class="hidden space-y-4">
+                            <div class="bg-blue-50 border-2 border-blue-300 rounded-lg p-6 text-center">
+                                <p class="text-slate-700 font-medium mb-4">Se enviará un código de verificación a tu teléfono</p>
+                                <div>
+                                    <label class="block text-slate-700 font-bold mb-2">Número de Teléfono</label>
+                                    <input type="tel" placeholder="+34 6XX XXX XXX" class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-600 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Confirm Button -->
+                        <button onclick="processPayment()" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 rounded-lg transition transform hover:scale-105 btn-load relative">
+                            <span id="btnText">Confirmar Compra</span>
+                            <span id="loadingSpinner" class="hidden">
+                                <span class="loading-spinner"></span>Procesando...
+                            </span>
+                        </button>
+
+                        <p class="text-center text-slate-500 text-sm">💰 Tus datos de pago están seguros y encriptados</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FÁBRICA 4.0 DASHBOARD -->
+    <section id="factory" class="py-20 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Fábrica 4.0</h2>
+                <p class="text-xl text-slate-300">Estat de la producció en directe</p>
+            </div>
+
+            <!-- Real-time Status Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <!-- Card 1 -->
+                <div class="glass-effect rounded-xl p-6 text-center">
+                    <div class="text-4xl float-icon mb-4">🌡️</div>
+                    <p class="text-slate-300 text-sm mb-2">Temperatura de Horno</p>
+                    <p class="text-3xl font-bold text-blue-400" id="temp">45°C</p>
+                    <p class="text-xs text-slate-400 mt-2">Optimal</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-effect rounded-xl p-6 text-center">
+                    <div class="text-4xl float-icon mb-4">⚙️</div>
+                    <p class="text-slate-300 text-sm mb-2">Máquinas en Funcionamiento</p>
+                    <p class="text-3xl font-bold text-green-400" id="machines">8/10</p>
+                    <p class="text-xs text-slate-400 mt-2">80% Capacidad</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-effect rounded-xl p-6 text-center">
+                    <div class="text-4xl float-icon mb-4">📦</div>
+                    <p class="text-slate-300 text-sm mb-2">Prendas Producidas Hoy</p>
+                    <p class="text-3xl font-bold text-purple-400" id="units">2,450</p>
+                    <p class="text-xs text-slate-400 mt-2">↑ 12% vs. ayer</p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="glass-effect rounded-xl p-6 text-center">
+                    <div class="text-4xl float-icon mb-4">✅</div>
+                    <p class="text-slate-300 text-sm mb-2">Calidad Control Pass</p>
+                    <p class="text-3xl font-bold text-blue-400" id="quality">99.2%</p>
+                    <p class="text-xs text-slate-400 mt-2">Excelente</p>
+                </div>
+            </div>
+
+            <!-- Production Chart -->
+            <div class="bg-slate-800 rounded-xl p-8">
+                <h3 class="text-2xl font-bold mb-6">Producción Últimas 24 Horas (Prendas/Hora)</h3>
+                <div class="chart-container">
+                    <canvas id="productionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Activity Log -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                <div class="bg-slate-800 rounded-xl p-6">
+                    <h3 class="text-xl font-bold mb-4">🔔 Últimas Alertas</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start space-x-3">
+                            <span class="text-green-400 font-bold">✓</span>
+                            <span class="text-slate-300 text-sm">Sistema de enfriamiento normalizado a las 08:45</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-yellow-400 font-bold">!</span>
+                            <span class="text-slate-300 text-sm">Mantenimiento de rodillo 3 completado a las 07:30</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-blue-400 font-bold">ℹ</span>
+                            <span class="text-slate-300 text-sm">Cambio de lote de material a las 06:00</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-800 rounded-xl p-6">
+                    <h3 class="text-xl font-bold mb-4">📊 Estadísticas del Turno</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-slate-300 text-sm mb-2">Eficiencia</p>
+                            <div class="w-full bg-slate-700 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full" style="width: 94%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-slate-300 text-sm mb-2">Tiempo de Inactividad</p>
+                            <div class="w-full bg-slate-700 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full" style="width: 12%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-slate-300 text-sm mb-2">Consumo Energético</p>
+                            <div class="w-full bg-slate-700 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full" style="width: 68%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contacto" class="bg-slate-800 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <!-- Company Info -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Tèxtils Montblanc</h3>
+                    <p class="text-slate-400 text-sm mb-4">
+                        Ropa técnica de montaña con tecnología de vanguardia. Desde Igualada hacia el mundo.
+                    </p>
+                    <p class="text-slate-500 text-xs">
+                        © 2026 Tèxtils Montblanc. Tots els drets reservats.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-bold mb-4">Navegació</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="#inicio" class="hover:text-blue-400 transition">Inicio</a></li>
+                        <li><a href="#tienda" class="hover:text-blue-400 transition">Tienda</a></li>
+                        <li><a href="#factory" class="hover:text-blue-400 transition">Fábrica 4.0</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition">Blog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Customer Service -->
+                <div>
+                    <h4 class="font-bold mb-4">Servei al Client</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="#" class="hover:text-blue-400 transition">Preguntes Freqüents</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition">Política de Devolucions</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition">Seguiment de Comanda</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition">Contacte'ns</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact & Social -->
+                <div>
+                    <h4 class="font-bold mb-4">Contacte</h4>
+                    <div class="space-y-3 mb-6">
+                        <p class="text-slate-400 text-sm">
+                            <span class="font-bold">Igualada, Barcelona</span><br>
+                            Carrer de la Ronda, 123
+                        </p>
+                        <p class="text-slate-400 text-sm">
+                            <span class="font-bold">📞</span> +34 93 804 1234<br>
+                            <span class="font-bold">✉️</span> info@textilsmontblanc.cat
+                        </p>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-slate-400 hover:text-blue-400 transition text-xl">f</a>
+                        <a href="#" class="text-slate-400 hover:text-blue-400 transition text-xl">𝕏</a>
+                        <a href="#" class="text-slate-400 hover:text-blue-400 transition text-xl">📱</a>
+                        <a href="#" class="text-slate-400 hover:text-blue-400 transition text-xl">▶</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-700 pt-8 text-center text-slate-500 text-sm">
+                <p>Feta amb ❤️ per a aventurers del Montblanc</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('menuBtn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.getElementById('mobileMenu').classList.add('hidden');
+            });
+        });
+
+        // Shopping Cart Functionality
+        let cart = [];
+        const SHIPPING_COST = 9.99;
+
+        function addToCart(product, price) {
+            cart.push({ product, price });
+            updateCartDisplay();
+            alert(`✅ ${product} añadido a la cistella!`);
+        }
+
+        function updateCartDisplay() {
+            const cartSummary = document.getElementById('cartSummary');
+            const subtotalEl = document.getElementById('subtotal');
+            const totalEl = document.getElementById('total');
+
+            if (cart.length === 0) {
+                cartSummary.innerHTML = '<div class="flex justify-between items-center py-2 border-b border-slate-200"><span class="text-slate-600">Carrito vacío</span></div>';
+                subtotalEl.textContent = '€0';
+                totalEl.textContent = '€' + SHIPPING_COST.toFixed(2);
+                return;
+            }
+
+            let cartHTML = '';
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                cartHTML += `
+                    <div class="flex justify-between items-center py-2 border-b border-slate-200">
+                        <div class="flex-1">
+                            <p class="text-slate-800 font-medium text-sm">${item.product}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-blue-600 font-bold">€${item.price}</p>
+                            <button onclick="removeFromCart(${index})" class="text-red-500 text-xs hover:underline">Eliminar</button>
+                        </div>
+                    </div>
+                `;
+                subtotal += item.price;
+            });
+
+            cartSummary.innerHTML = cartHTML;
+            subtotalEl.textContent = '€' + subtotal.toFixed(2);
+            totalEl.textContent = '€' + (subtotal + SHIPPING_COST).toFixed(2);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartDisplay();
+        }
+
+        function clearCart() {
+            cart = [];
+            updateCartDisplay();
+        }
+
+        // Payment Method Selection
+        document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('cardPayment').classList.toggle('hidden', this.value !== 'card');
+                document.getElementById('bizumPayment').classList.toggle('hidden', this.value !== 'bizum');
+            });
+        });
+
+        // Process Payment with Loading Animation
+        function processPayment() {
+            if (cart.length === 0) {
+                alert('⚠️ Tu cistella está vacía. Añade productos antes de comprar.');
+                return;
+            }
+
+            const btnText = document.getElementById('btnText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const button = event.target;
+
+            btnText.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+            button.disabled = true;
+
+            // Simulate payment processing
+            setTimeout(() => {
+                btnText.classList.remove('hidden');
+                loadingSpinner.classList.add('hidden');
+                button.disabled = false;
+
+                alert('✅ ¡Compra realizada con éxito! Tu pedido ha sido confirmado.\n\nTe enviaremos un email con los detalles del envío.');
+                cart = [];
+                updateCartDisplay();
+            }, 2500);
+        }
+
+        // Factory 4.0 Dashboard - Real-time Updates
+        function updateDashboard() {
+            // Simulate real-time data
+            document.getElementById('temp').textContent = (40 + Math.random() * 10).toFixed(1) + '°C';
+            document.getElementById('machines').textContent = Math.floor(6 + Math.random() * 4) + '/10';
+            document.getElementById('units').textContent = (2400 + Math.floor(Math.random() * 100)).toLocaleString('es-ES');
+            document.getElementById('quality').textContent = (98 + Math.random() * 1.5).toFixed(1) + '%';
+        }
+
+        // Update dashboard on page load and every 5 seconds
+        updateDashboard();
+        setInterval(updateDashboard, 5000);
+
+        // Production Chart - Chart.js
+        const ctx = document.getElementById('productionChart').getContext('2d');
+        const productionChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
+                datasets: [{
+                    label: 'Prendas/Hora',
+                    data: [180, 195, 210, 225, 240, 255, 270, 280, 265, 245, 220, 200],
+                    backgroundColor: 'rgba(30, 144, 255, 0.6)',
+                    borderColor: 'rgba(30, 144, 255, 1)',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    fill: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: '#e2e8f0',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 300,
+                        ticks: {
+                            color: '#94a3b8',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.1)',
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#94a3b8',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Initialize cart display
+        updateCartDisplay();
+    </script>
+
+</body>
+</html>
